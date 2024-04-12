@@ -5,7 +5,7 @@ import fs from 'fs';
 import mongoose from 'mongoose';
 import { isMainThread, parentPort, Worker, workerData } from 'worker_threads';
 
-import AgentModel from '../models/agent.model';
+import { AgentModel } from '../models';
 
 const { csvFilePath } = workerData;
 
@@ -15,8 +15,7 @@ fs.createReadStream(csvFilePath)
   .pipe(csv())
   .on('data', async data => {
     try {
-      // const agent = new AgentModel({ agent: data.agent });
-      // await agent.save();
+      //
 
       // const user = new User({
       //   firstName: data.firstname,
@@ -34,6 +33,7 @@ fs.createReadStream(csvFilePath)
       // results.push('Data saved successfully');
       results.push(data);
     } catch (error) {
+      console.log(error);
       results.push(`Error saving data: ${error}`);
     }
   })

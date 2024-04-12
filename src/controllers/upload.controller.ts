@@ -4,6 +4,8 @@ import boom from '@hapi/boom';
 import { NextFunction, Request, Response } from 'express';
 import { Worker } from 'worker_threads';
 
+import { AgentModel } from '../models';
+
 export const uploadContoller = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     if (!req.file) {
@@ -15,14 +17,23 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
 
     const workerRes = new Worker('./src/workers/csv.ts', { workerData: { csvFilePath } });
 
+    let result: any = [];
     workerRes.on('message', message => {
-      res.send({ data: message });
+      result = message;
     });
 
-    // Listen for errors from the worker thread
     workerRes.on('error', error => {
       console.error('Worker error:', error);
       res.status(500).send('Internal Server Error');
+    });
+
+    workerRes.on('exit', async message => {
+      const agent = new AgentModel({ agent: 'data.agent' });
+      const sss = await agent.save();
+
+      res.send({ data: result });
+
+      workerRes.terminate();
     });
   } catch (error) {
     next(error);
