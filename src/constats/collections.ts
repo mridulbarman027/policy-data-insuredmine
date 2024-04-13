@@ -1,6 +1,9 @@
 export enum COLLECTION {
   AGENT = 'Agent',
-  users = 'users',
-  applications = 'applications',
-  replies = 'replies',
+  USER = 'User',
+  USER_ACCOUNT = 'UserAccount',
+  POLICY_CATEGORY = 'PolicyCategory',
+  POLICY_CARRIER = 'PolicyCarrier',
+  POLICY_INFO = 'PolicyInfo',
+  MESSAGE = 'Message',
 }

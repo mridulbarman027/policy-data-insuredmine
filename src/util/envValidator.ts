@@ -3,8 +3,6 @@
 import dotenv from 'dotenv';
 import { z } from 'zod';
 
-import logger from '../config/logger';
-
 dotenv.config();
 
 export const environmentVariablesSchema = z.object({

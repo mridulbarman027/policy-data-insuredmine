@@ -24,6 +24,7 @@ export const UserModel = model(COLLECTION.USER, userSchema);
 
 const policyCarrierSchema = new Schema({
   company_name: String,
+  category_id: String,
 });
 
 export const PolicyCarrierModel = model(COLLECTION.POLICY_CARRIER, policyCarrierSchema);
@@ -59,4 +60,4 @@ const messageSchema = new Schema({
   date_time: Date,
 });
 
-export const MessageModel = model(COLLECTION.USER_ACCOUNT, messageSchema);
+export const MessageModel = model(COLLECTION.MESSAGE, messageSchema);
