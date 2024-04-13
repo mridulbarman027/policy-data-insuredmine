@@ -2,7 +2,10 @@
   "name": "policy-data-insuredmine",
   "version": "1.0.0",
   "description": "Backend server",
-  "main": "index.js",
+  "main": "/dist/src/index.js",
+  "author": {
+    "name": "Mridul Barman"
+  },
   "scripts": {
     "dev": "ts-node-dev --inspect=8181 --respawn --transpile-only src/index.ts",
     "build": "tsc",
