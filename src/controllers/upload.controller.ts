@@ -7,10 +7,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable unicorn/no-null */
 import boom from '@hapi/boom';
+import dayjs from 'dayjs';
 import { NextFunction, Request, Response } from 'express';
 import { Worker } from 'worker_threads';
 
-import { AgentModel, PolicyCarrierModel, PolicyCategoryModel } from '../models';
+import {
+  AgentModel,
+  PolicyCarrierModel,
+  PolicyCategoryModel,
+  PolicyInfoModel,
+  UserAccountModel,
+  UserModel,
+} from '../models';
 
 export const uploadContoller = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -39,11 +47,9 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
       const uniqueAgents = new Set();
       const uniquepolicyCategories = new Set();
       const uniquepolicyCarriers = new Set();
-      const uniquepolicyInfos = new Set();
 
       const agents: any = [];
       const users: any = [];
-      const userAccounts: any = [];
       const policyCategories: any = [];
       const policyCarriers: any = [];
       const policyInfos: any = [];
@@ -73,14 +79,18 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
         policyCategories.push({ category_name });
 
         agents.push({ agent });
-        users.push({ firstname, dob, address, phone, state, zip, email, gender, userType });
-        userAccounts.push({ account_name });
+        users.push({ firstname, dob, address, phone, state, zip, email, gender, userType, account_name });
 
         policyInfos.push({
           policy_number,
           policy_start_date,
           policy_end_date,
           policy_category,
+          company_name,
+          category_name,
+          agent,
+          firstname,
+          phone,
         });
       });
 
@@ -144,7 +154,61 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
             }
           }
 
-          if (index === policyCarriers.length - 1) {
+          if (index === agents.length - 1) {
+            resolve();
+          }
+        });
+      });
+
+      await new Promise<void>((resolve, reject) => {
+        users.forEach(async (item: any, index: number) => {
+          const userModel = new UserModel({
+            firstname: item.firstname,
+            dob: item.dob,
+            address: item.address,
+            phone: item.phone,
+            state: item.state,
+            zip: item.zip,
+            email: item.email,
+            gender: item.gender,
+            userType: item.userType,
+          });
+          await userModel.save();
+
+          const userAccountModel = new UserAccountModel({
+            account_name: item.account_name,
+            user_id: userModel._id,
+          });
+
+          await userAccountModel.save();
+
+          if (index === users.length - 1) {
+            resolve();
+          }
+        });
+      });
+
+      await new Promise<void>((resolve, reject) => {
+        policyInfos.forEach(async (item: any, index: number) => {
+          const companyExists = await PolicyCarrierModel.findOne({ company_name: item.company_name });
+          const categoryExists = await PolicyCategoryModel.findOne({ category_name: item.category_name });
+          const agentExists = await AgentModel.findOne({ agent: item.agent });
+          const userExists = await UserModel.findOne({ firstname: item.firstname, phone: item.phone });
+          const userAccountModelExists = await UserAccountModel.findOne({ user_id: userExists?.id });
+
+          const policyInfoModel = new PolicyInfoModel({
+            policy_number: item.policy_number,
+            policy_start_date: dayjs(item.policy_start_date, 'MM/DD/YYYY').toDate(),
+            policy_end_date: dayjs(item.policy_end_date, 'MM/DD/YYYY').toDate(),
+            policy_carrier_id: companyExists?._id,
+            policy_category_id: categoryExists?.id,
+            agent_id: agentExists?._id,
+            user_id: userExists?._id,
+            user_account_id: userAccountModelExists?.id,
+          });
+          await policyInfoModel.save();
+
+          if (index === policyInfos.length - 1) {
             resolve();
           }
         });
