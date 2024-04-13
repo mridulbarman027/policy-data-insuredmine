@@ -214,7 +214,7 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
         });
       });
 
-      res.send({ data: result });
+      res.send({ message: 'CSV data uploaded successfully' });
     });
   } catch (error) {
     next(error);
