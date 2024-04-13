@@ -56,6 +56,7 @@ const policyInfoSchema = new Schema({
 export const PolicyInfoModel = model(COLLECTION.POLICY_INFO, policyInfoSchema);
 
 const messageSchema = new Schema({
+  _id: String,
   message: String,
   date_time: Date,
 });
