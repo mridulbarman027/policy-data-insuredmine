@@ -24,6 +24,10 @@ API LIST
   METHOD: POST
   BODY: { "message": "test", "date": "14/07/2024", "time": "01:18" }
 
+* Steps to run the app
+- in dot env file put the db url like its there in .env.example
+- run code npm i
+- run npm run dev
 
 * Notes:
 - Transaction can be used so that if there is any invalid data or some insert fails we can rollback.
