@@ -1,10 +1,10 @@
 import express from 'express';
 import multer from 'multer';
 
-import { messageContoller } from '../controllers/message.controller';
-import { searchContoller } from '../controllers/search.controller';
-import { uploadContoller } from '../controllers/upload.controller';
-import { userPoliciesContoller } from '../controllers/user.policies.controller';
+import { messageContoller } from '../controllers/message.controller.js';
+import { searchContoller } from '../controllers/search.controller.js';
+import { uploadContoller } from '../controllers/upload.controller.js';
+import { userPoliciesContoller } from '../controllers/user.policies.controller.js';
 
 const upload = multer({ dest: 'temp/' });
 

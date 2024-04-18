@@ -1,15 +1,14 @@
 import boom from '@hapi/boom';
 import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { NextFunction, Request, Response } from 'express';
+import customParseFormat from 'dayjs/plugin/customParseFormat.js';
 
-import { MessageModel } from '../models';
-import { toBase64 } from '../util';
+import { MessageModel } from '../models/index.js';
+import { toBase64 } from '../util/index.js';
 
 dayjs.extend(customParseFormat);
 dayjs.locale('en');
 
-export const messageContoller = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const messageContoller = async (req, res, next) => {
   try {
     const { message, date, time } = req.body;
 

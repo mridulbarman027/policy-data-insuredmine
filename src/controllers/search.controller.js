@@ -1,10 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import boom from '@hapi/boom';
-import { NextFunction, Request, Response } from 'express';
 
-import { PolicyInfoModel, UserModel } from '../models';
+import { PolicyInfoModel, UserModel } from '../models/index.js';
 
-export const searchContoller = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const searchContoller = async (req, res, next) => {
   try {
     if (!req.params.username) {
       next(boom.badRequest('Invalid username'));

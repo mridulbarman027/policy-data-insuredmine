@@ -9,12 +9,12 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import os from 'os';
 import requestIp from 'request-ip';
+import 'dotenv/config';
 
-import connectMongo from './config/mongodb';
-import errorHandler from './middlewares/errorHandler.middleware';
-import notFoundHandler from './middlewares/notFoundHandler.middleware';
-import api from './routes';
-import { validateEnvironmentVariables } from './util/envValidator';
+import connectMongo from './config/mongodb.js';
+import errorHandler from './middlewares/errorHandler.middleware.js';
+import notFoundHandler from './middlewares/notFoundHandler.middleware.js';
+import api from './routes/index.js';
 
 const PORT = process.env.PORT || 8080;
 
@@ -35,7 +35,7 @@ connectMongo()
     app.listen(PORT, () => {
       try {
         console.log('Checking environment variables');
-        validateEnvironmentVariables();
+
         console.log(`Listening at http://localhost:${PORT}`);
       } catch (error) {
         console.log(error);
@@ -49,8 +49,8 @@ connectMongo()
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-let previousCPUUsage: any;
-let serverProcess: any;
+let previousCPUUsage;
+let serverProcess;
 
 const startServer = () => {
   console.log('Starting server...');

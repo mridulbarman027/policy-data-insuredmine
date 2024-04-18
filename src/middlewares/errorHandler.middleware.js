@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import boom from '@hapi/boom';
-import type { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
-// eslint-disable-next-line no-unused-vars
-const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction): void => {
+const errorHandler = (err, req, res, next) => {
   const isZodError = err instanceof ZodError;
   const isDev = process.env.NODE_ENV === 'development';
   if (isDev && isZodError) {

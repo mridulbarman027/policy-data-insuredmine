@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose';
 
-import { COLLECTION } from '../constats/collections';
+import { COLLECTION } from '../constats/collections.js';
 
 const agentSchema = new Schema({
   agent: String,

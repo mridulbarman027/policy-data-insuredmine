@@ -1,8 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
+import { UserModel } from '../models/index.js';
 
-import { UserModel } from '../models';
-
-export const userPoliciesContoller = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const userPoliciesContoller = async (req, res, next) => {
   try {
     const aggregatedData = await UserModel.aggregate([
       {

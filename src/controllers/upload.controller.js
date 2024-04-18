@@ -4,11 +4,9 @@
 /* eslint-disable sonarjs/no-empty-collection */
 /* eslint-disable unicorn/no-array-for-each */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable unicorn/no-null */
 import boom from '@hapi/boom';
 import dayjs from 'dayjs';
-import { NextFunction, Request, Response } from 'express';
 import { Worker } from 'worker_threads';
 
 import {
@@ -18,9 +16,9 @@ import {
   PolicyInfoModel,
   UserAccountModel,
   UserModel,
-} from '../models';
+} from '../models/index.js';
 
-export const uploadContoller = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const uploadContoller = async (req, res, next) => {
   try {
     if (!req.file) {
       next(boom.badRequest('Invalid Payload'));
@@ -29,9 +27,9 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
 
     const csvFilePath = req.file.path;
 
-    const workerRes = new Worker('./src/workers/csv.ts', { workerData: { csvFilePath } });
+    const workerRes = new Worker('./src/workers/csv.js', { workerData: { csvFilePath } });
 
-    let result: any = [];
+    let result = [];
     workerRes.on('message', message => {
       result = message;
     });
@@ -48,13 +46,13 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
       const uniquepolicyCategories = new Set();
       const uniquepolicyCarriers = new Set();
 
-      const agents: any = [];
-      const users: any = [];
-      const policyCategories: any = [];
-      const policyCarriers: any = [];
-      const policyInfos: any = [];
+      const agents = [];
+      const users = [];
+      const policyCategories = [];
+      const policyCarriers = [];
+      const policyInfos = [];
 
-      result.forEach(async (item: any) => {
+      result.forEach(async item => {
         const {
           agent,
           firstname,
@@ -94,8 +92,8 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
         });
       });
 
-      await new Promise<void>((resolve, reject) => {
-        policyCategories.forEach(async (item: any, index: number) => {
+      await new Promise((resolve, reject) => {
+        policyCategories.forEach(async (item, index) => {
           if (!uniquepolicyCategories.has(item.category_name)) {
             uniquepolicyCategories.add(item.category_name);
 
@@ -115,8 +113,8 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
         });
       });
 
-      await new Promise<void>((resolve, reject) => {
-        policyCarriers.forEach(async (item: any, index: number) => {
+      await new Promise((resolve, reject) => {
+        policyCarriers.forEach(async (item, index) => {
           if (!uniquepolicyCarriers.has(item.company_name)) {
             uniquepolicyCarriers.add(item.company_name);
 
@@ -139,8 +137,8 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
         });
       });
 
-      await new Promise<void>((resolve, reject) => {
-        agents.forEach(async (item: any, index: number) => {
+      await new Promise((resolve, reject) => {
+        agents.forEach(async (item, index) => {
           if (!uniqueAgents.has(item.agent)) {
             uniqueAgents.add(item.agent);
 
@@ -160,8 +158,8 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
         });
       });
 
-      await new Promise<void>((resolve, reject) => {
-        users.forEach(async (item: any, index: number) => {
+      await new Promise((resolve, reject) => {
+        users.forEach(async (item, index) => {
           const userModel = new UserModel({
             firstname: item.firstname,
             dob: item.dob,
@@ -188,8 +186,8 @@ export const uploadContoller = async (req: Request, res: Response, next: NextFun
         });
       });
 
-      await new Promise<void>((resolve, reject) => {
-        policyInfos.forEach(async (item: any, index: number) => {
+      await new Promise((resolve, reject) => {
+        policyInfos.forEach(async (item, index) => {
           const companyExists = await PolicyCarrierModel.findOne({ company_name: item.company_name });
           const categoryExists = await PolicyCategoryModel.findOne({ category_name: item.category_name });
           const agentExists = await AgentModel.findOne({ agent: item.agent });
