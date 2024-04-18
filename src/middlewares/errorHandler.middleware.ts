@@ -3,8 +3,6 @@ import boom from '@hapi/boom';
 import type { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
-import logger from '../config/logger';
-
 // eslint-disable-next-line no-unused-vars
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction): void => {
   const isZodError = err instanceof ZodError;
