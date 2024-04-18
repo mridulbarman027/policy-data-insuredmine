@@ -19,7 +19,7 @@ API LIST
   METHOD: GET
 
 * Message:
-  API: http://localhost:8080/api/message
+  API: http://localhost:8080/api/message <br />
   TYPE: application/json
   METHOD: POST
   BODY: { "message": "test", "date": "14/07/2024", "time": "01:18" }
