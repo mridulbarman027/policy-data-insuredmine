@@ -1,0 +1,80 @@
+1. Orgnaisation ->many -> Employees -> each employee creates spreadsheet
+
+
+organisation
+	* org_id
+	* org_name
+	* other details
+	* org_created_at
+	* org_updated_at
+	
+	
+employees
+	* employee_id
+	* employee_name
+	
+	* org_id		//foriegn key from organisation table
+	
+	
+roles 			//mapping table
+	* role_id
+	* user_id
+	* spreadsheet_id
+	* type	[ADMIN, EDITOR, VIEWER, PUBLIC_EDITOR, PUBLIC_VIEWER]
+	
+spreadsheet
+	* spreadsheet_id
+	* spreadsheet_created_at
+	* spreadsheet_updated_at
+
+spreadsheet_data
+	* spreadsheet_data_id
+	* spreadsheet_id		// foreign key from spreadsheet
+	* spreadsheet_x			// row with A,B,C and so on.
+	* spreadsheet_y			// we can auto increment it with number in db or we can handle it in application layer also
+	* spreadsheet_data
+	* spreadsheet_created_at
+	* spreadsheet_updated_at
+	
+	
+	
+spreadsheet_data
+	* spreadsheet_data_id
+	* spreadsheet_id		// foreign key from spreadsheet
+	* spreadsheet_data
+		json
+		// json [
+			1: {
+				x: "A",
+				y: 1,
+				value: "Example",
+				u_id: uuid()
+			},
+			{
+				x: "B",
+				y: 2,
+				value: "ExampleB"
+			},
+			{
+				""
+			}
+		]
+	* spreadsheet_created_at
+	* spreadsheet_updated_at
+	
+
+version
+	* version_id
+	* spreadsheet_id
+	* u_id			// linked to each cell
+	* type		[add, update, delete]
+	* previous_value
+	* new_value
+	* created_at
+	
+	{
+		
+	}
+
+
+	
